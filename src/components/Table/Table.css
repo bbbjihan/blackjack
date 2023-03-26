@@ -1,0 +1,87 @@
+.dealer {
+    background-color: #007700;
+    min-width: 300px;
+    margin: 10px;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #fff;
+    border-radius: 5px;
+    min-height: 143px;
+}
+
+.dealer .status {
+    color: #fff;
+    display: flex;
+    justify-content: space-evenly;
+}
+  
+.dealer .dealerCard {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+  
+.player {
+    background-color: #007700;
+    min-width: 300px;
+    margin: 10px;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #fff;
+    border-radius: 5px;
+    min-height: 143px;
+}
+
+.player .status {
+    color: #fff;
+    display: flex;
+    justify-content: space-evenly;
+}
+  
+.player .playerCard {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card {
+    background-color: #fff;
+    border: 1px solid #000;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    display: inline-block;
+    font-size: 20px;
+    height: 100px;
+    margin: 10px;
+    position: relative;
+    width: 65px;
+}
+  
+.spade, .clover {
+    color: #000;
+}
+  
+.heart, .diamond {
+    color: red;
+}
+  
+.card .card-number {
+    font-size: 40px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+  
+.card .card-icon:before {
+    content: '';
+    display: inline-block;
+    margin-right: 5px;
+    vertical-align: middle;
+}
+  
+.card .card-icon {
+    display: inline-block;
+    font-size: 20px;
+    vertical-align: middle;
+}
