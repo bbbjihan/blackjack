@@ -21,13 +21,21 @@ const Table = ({money, setMoney, bet, setBet, phase, setPhase, deckD, deckP, sco
             <div class="dealer">
                 <div class="status">
                     <div class="dealertag">DEALER</div>
-                    <div class="dealerScore">{phase !== 3 ? 0 : scoreD}</div>
+                    <div class="dealerScore">{phase === 0 || phase === 2 ? 0 : scoreD}</div>
                 </div>
                 {phase === 0 || phase === 2 ?
                     <></>
                 :
                     phase === 1 ?
                         <div class="dealerCard">
+                            <div class="card">
+                                <div class={deckD[0][1]}>
+                                    <div class="card-number">{number(deckD[0][0])}</div>
+                                    <div class="card-icon">
+                                        {icon(deckD[0][1])}
+                                    </div>
+                                </div>
+                            </div>
                             <div class="cardBack"></div>
                         </div>
                         :

@@ -4,6 +4,7 @@ import './Choose.css';
 const Choose = ({money, setMoney, bet, setBet, phase, setPhase, inform, setInform, scoreD, setScoreD, scoreP, setScoreP, deckD, setDeckD, deckP, setDeckP}) => {
     const [betting, setBetting] = useState(10);
     let deck = [];
+    let playerScore = 0;
 
     const cardShuffle = () => {
         setPhase(2);
@@ -32,10 +33,18 @@ const Choose = ({money, setMoney, bet, setBet, phase, setPhase, inform, setInfor
         }else{
             setPhase(3);
             let draw = deck.shift();
+            let count = 0;
+            if(draw[0] === 1){
+                count = 11;
+            }else if(draw[0] > 10){
+                count = 10;
+            }else{count = draw[0];}
             if(owner === "DEALER"){
                 setDeckD((prev)=>[...prev,draw]);
+                setScoreD((prev)=>prev + count);
             }else{
                 setDeckP((prev)=>[...prev,draw]);
+                setScoreP((prev)=>prev + count);
             }
             setInform(owner + "'s draw, " + draw[0] + " " + draw[1]);
         }
@@ -46,17 +55,20 @@ const Choose = ({money, setMoney, bet, setBet, phase, setPhase, inform, setInfor
         setBetting(10);
         cardDraw("PLAYER");
         setTimeout(()=>{
-            cardDraw("PLAYER");
+            cardDraw("DEALER");
         },2000);
         setTimeout(()=>{
+            cardDraw("PLAYER");
+        },3000);
+        setTimeout(()=>{
             actionPhase();
-        },3000)
+        },4000)
     }
 
     const actionPhase = () => {
-        if(scoreP > 21){
+        if(playerScore > 21){
             playerBurst();
-        }else if(scoreP === 21){
+        }else if(playerScore === 21){
             playerBJ();
         }else{
             setPhase(1);
@@ -80,39 +92,7 @@ const Choose = ({money, setMoney, bet, setBet, phase, setPhase, inform, setInfor
         if(betting >= 20) setBetting((prev) => {return (prev - 10)});
     }
  
-    useEffect(() => {
-        let tmp = 0;
-        if(deckD.length !== 0){
-            for(let i = 0; i < deckD.length; i++){
-                let num = deckD[i][0];
-                if(num > 10){
-                    tmp += 10;
-                }else if(num === 1){
-                    tmp += 11;
-                }else{
-                    tmp += num;
-                }
-            }
-        }
-        setScoreD(tmp);
-    }, [deckD, setScoreD]);
 
-    useEffect(()=>{
-        let tmp = 0;
-        if(deckP.length !== 0){
-            for(let i = 0; i < deckP.length; i++){
-                let num = deckP[i][0];
-                if(num > 10){
-                    tmp += 10;
-                }else if(num === 1){
-                    tmp += 11;
-                }else{
-                    tmp += num;
-                }
-            }
-        }
-        setScoreP(tmp);
-    }, [deckP, setScoreP]);
 
     return(
         <div>
