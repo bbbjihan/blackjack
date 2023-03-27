@@ -1,7 +1,11 @@
 import React from "react";
+import { useRecoilValue } from "recoil";
+import { informState, phaseState } from "../../Atom";
 import './Inform.css';
 
-const Inform = ({money, setMoney, bet, setBet, phase, setPhase, inform, setInform}) => {
+const Inform = () => {
+    const phase = useRecoilValue(phaseState);
+    const inform = useRecoilValue(informState);
     return(
         <div>
             <div class="informBar">

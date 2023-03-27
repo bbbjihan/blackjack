@@ -1,8 +1,10 @@
 import React from "react";
+import { useRecoilValue } from "recoil";
+import { DhandState, DscoreState, PhandState, phaseState, PscoreState } from "../../Atom";
 import './Table.css';
 
 
-const Table = ({money, setMoney, bet, setBet, phase, setPhase, deckD, deckP, scoreD, scoreP}) => {
+const Table = () => {
     const icon = (value) => {
         if (value === "spade") return "♠";
         if (value === "diamond") return "◆";
@@ -10,29 +12,36 @@ const Table = ({money, setMoney, bet, setBet, phase, setPhase, deckD, deckP, sco
         if (value === "clover") return "♣";
     }
     const number = (value) => {
-        if (value === 11) return "J";
-        if (value === 12) return "Q";
-        if (value === 13) return "K";
-        if (value === 1) return "A";
         return value;
     }
+    const phase = useRecoilValue(phaseState);
+    const Dhand = useRecoilValue(DhandState);
+    const Phand = useRecoilValue(PhandState);
+    const Dscore = useRecoilValue(DscoreState);
+    const Pscore = useRecoilValue(PscoreState);
     return(
         <div>
             <div class="dealer">
                 <div class="status">
                     <div class="dealertag">DEALER</div>
-                    <div class="dealerScore">{phase !== 3 ? 0 : scoreD}</div>
+                    <div class="dealerScore">{phase === 0 || phase === 2 ? 0 : Dscore}</div>
                 </div>
                 {phase === 0 || phase === 2 ?
                     <></>
                 :
                     phase === 1 ?
                         <div class="dealerCard">
+                            <div class="card">
+                                <div class={Dhand[0][1]}>
+                                    <div class="card-number">{number(Dhand[0][0])}</div>
+                                    <div class="card-icon">{icon(Dhand[0][1])}</div>
+                                </div>
+                            </div>
                             <div class="cardBack"></div>
                         </div>
                         :
                     (<div class="dealerCard">
-                        {deckD.map((card,index) => {
+                        {Dhand.map((card,index) => {
                             return (
                                 <div class="card" key={index}>
                                     <div class={card[1]}>
@@ -51,13 +60,13 @@ const Table = ({money, setMoney, bet, setBet, phase, setPhase, deckD, deckP, sco
             <div class="player">
                 <div class="status">
                     <div class="playertag">PLAYER</div>
-                    <div class="playerScore">{phase === 0 || phase === 2 ? 0 :scoreP}</div>
+                    <div class="playerScore">{phase === 0 || phase === 2 ? 0 :Pscore}</div>
                 </div>
-                {phase === 0 || phase === 2 || deckP.length === 0?
+                {phase === 0 || phase === 2 || Phand.length === 0?
                     <></>
                 :
                     <div class="playerCard">
-                        {deckP.map((card,index) => {
+                        {Phand.map((card,index) => {
                             return (
                                 <div class="card" key={index}>
                                     <div class={card[1]}>
