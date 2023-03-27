@@ -10,8 +10,8 @@ function App() {
   //0: betting, 1: opened, 2: shuffling, 3: distribute, 4: result,
   const [money, setMoney] = useState(100);
   const [bet, setBet] = useState(0);
-  const [deckD, setDeckD] = useState([[10,"spade"],[5,"heart"]]);
-  const [deckP, setDeckP] = useState([[11,"diamond"],[8,"clover"]]);
+  const [deckD, setDeckD] = useState([]);
+  const [deckP, setDeckP] = useState([]);
   const [scoreD, setScoreD] = useState(15);
   const [scoreP, setScoreP] = useState(19);
   const [inform, setInform] = useState("");
