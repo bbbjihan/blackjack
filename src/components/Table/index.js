@@ -24,12 +24,12 @@ const Table = () => {
             <div class="dealer">
                 <div class="status">
                     <div class="dealertag">DEALER</div>
-                    <div class="dealerScore">{phase === 0 || phase === 2 ? 0 : Dscore}</div>
+                    <div class="dealerScore">{phase === 0 ? 0 : Dscore}</div>
                 </div>
-                {phase === 0 || phase === 2 ?
+                {phase === 0 ?
                     <></>
                 :
-                    phase === 1 ?
+                    phase === 1 || phase === 11 ?
                         <div class="dealerCard">
                             <div class="card">
                                 <div class={Dhand[0][1]}>
@@ -60,9 +60,9 @@ const Table = () => {
             <div class="player">
                 <div class="status">
                     <div class="playertag">PLAYER</div>
-                    <div class="playerScore">{phase === 0 || phase === 2 ? 0 :Pscore}</div>
+                    <div class="playerScore">{phase === 0 ? 0 :Pscore}</div>
                 </div>
-                {phase === 0 || phase === 2 || Phand.length === 0?
+                {phase === 0 || Phand.length === 0?
                     <></>
                 :
                     <div class="playerCard">
