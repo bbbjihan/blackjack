@@ -12,8 +12,8 @@ function App() {
   const [bet, setBet] = useState(0);
   const [deckD, setDeckD] = useState([]);
   const [deckP, setDeckP] = useState([]);
-  const [scoreD, setScoreD] = useState(15);
-  const [scoreP, setScoreP] = useState(19);
+  const [scoreD, setScoreD] = useState(0);
+  const [scoreP, setScoreP] = useState(0);
   const [inform, setInform] = useState("");
 
 

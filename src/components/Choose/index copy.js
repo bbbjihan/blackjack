@@ -4,6 +4,7 @@ import './Choose.css';
 const Choose = ({money, setMoney, bet, setBet, phase, setPhase, inform, setInform, scoreD, setScoreD, scoreP, setScoreP, deckD, setDeckD, deckP, setDeckP}) => {
     const [betting, setBetting] = useState(10);
     let deck = [];
+    const setDeck = (obj) => {deck = obj;}
 
     const cardShuffle = () => {
         setPhase(2);
@@ -13,64 +14,40 @@ const Choose = ({money, setMoney, bet, setBet, phase, setPhase, inform, setInfor
             const j = Math.floor(Math.random() * (i + 1));
             [shuffling[i], shuffling[j]] = [shuffling[j], shuffling[i]];
         }
-        return shuffling;
+        setDeck(shuffling);
+        return Promise.resolve();
     }
 
-    const cardDraw = (owner) => {
-        if(!deck.length){
-            deck = cardShuffle();
-            setTimeout(()=>{
-                setPhase(3);
-                let draw = deck.shift();
-                if(owner === "DEALER"){
-                    setDeckD((prev)=>[...prev,draw]);
-                }else{
-                    setDeckP((prev)=>[...prev,draw]);
-                }
-                setInform(owner + "'s draw, " + draw[0] + " " + draw[1]);
-            },1000)
-        }else{
-            setPhase(3);
-            let draw = deck.shift();
-            if(owner === "DEALER"){
-                setDeckD((prev)=>[...prev,draw]);
-            }else{
-                setDeckP((prev)=>[...prev,draw]);
-            }
-            setInform(owner + "'s draw, " + draw[0] + " " + draw[1]);
-        }
+    const cardDraw = (decks, setDecks, hand = [], setHand, turn) => {
+        setPhase(3);
+        let tmp = decks;
+        let draw = tmp.shift();
+        setHand((prev) => [...prev,draw]);
+        setInform(turn + " Draw, " + draw[0] + " " + draw[1]);
+        setDecks(tmp);
     }
 
-    const BET = () => {
+    const BET = async() => {
         setBet(betting);
         setBetting(10);
-        cardDraw("PLAYER");
-        setTimeout(()=>{
-            cardDraw("PLAYER");
-        },2000);
-        setTimeout(()=>{
-            actionPhase();
-        },3000)
-    }
-
-    const actionPhase = () => {
-        if(scoreP > 21){
-            playerBurst();
-        }else if(scoreP === 21){
-            playerBJ();
-        }else{
+        await cardShuffle();
+        setTimeout(async function(){
+            await cardDraw(deck, setDeck, deckD, setDeckD, "DEALER");
+        }, 1000);
+        setTimeout(async function(){
+            await cardDraw(deck, setDeck, deckP, setDeckP, "PLAYER");
+        }, 2000);
+        setTimeout(async function(){
+            await cardDraw(deck, setDeck, deckD, setDeckD, "DEALER");
+        }, 3000);
+        setTimeout(async function(){
+            await cardDraw(deck, setDeck, deckP, setDeckP, "PLAYER");
+        }, 4000);
+        setTimeout(function(){
             setPhase(1);
             setInform("액션을 선택하세요.");
-        }
-    }
-
-    const playerBurst = () => {
-        setInform("PLAYER BURST.");
-    }
-
-    const playerBJ = () => {
-        setInform("PLAYER BLACK JACK.");
-    }
+        }, 5000);
+    };
 
     const betAdjustUP = () => {
         if(betting <= money - 10) setBetting((prev) => {return (prev + 10)});
@@ -84,14 +61,7 @@ const Choose = ({money, setMoney, bet, setBet, phase, setPhase, inform, setInfor
         let tmp = 0;
         if(deckD.length !== 0){
             for(let i = 0; i < deckD.length; i++){
-                let num = deckD[i][0];
-                if(num > 10){
-                    tmp += 10;
-                }else if(num === 1){
-                    tmp += 11;
-                }else{
-                    tmp += num;
-                }
+                tmp += deckD[i][0];
             }
         }
         setScoreD(tmp);
@@ -101,14 +71,7 @@ const Choose = ({money, setMoney, bet, setBet, phase, setPhase, inform, setInfor
         let tmp = 0;
         if(deckP.length !== 0){
             for(let i = 0; i < deckP.length; i++){
-                let num = deckP[i][0];
-                if(num > 10){
-                    tmp += 10;
-                }else if(num === 1){
-                    tmp += 11;
-                }else{
-                    tmp += num;
-                }
+                tmp += deckP[i][0];
             }
         }
         setScoreP(tmp);

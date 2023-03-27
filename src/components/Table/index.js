@@ -21,15 +21,20 @@ const Table = ({money, setMoney, bet, setBet, phase, setPhase, deckD, deckP, sco
             <div class="dealer">
                 <div class="status">
                     <div class="dealertag">DEALER</div>
-                    <div class="dealerScore">{phase !== 1 ? 0 : scoreD}</div>
+                    <div class="dealerScore">{phase !== 3 ? 0 : scoreD}</div>
                 </div>
-                {phase !== 1 || deckD.length === 0?
+                {phase === 0 || phase === 2 ?
                     <></>
                 :
-                    <div class="dealerCard">
+                    phase === 1 ?
+                        <div class="dealerCard">
+                            <div class="cardBack"></div>
+                        </div>
+                        :
+                    (<div class="dealerCard">
                         {deckD.map((card,index) => {
                             return (
-                                <div class="card">
+                                <div class="card" key={index}>
                                     <div class={card[1]}>
                                         <div class="card-number">{number(card[0])}</div>
                                         <div class="card-icon">
@@ -39,22 +44,22 @@ const Table = ({money, setMoney, bet, setBet, phase, setPhase, deckD, deckP, sco
                                 </div>
                             );
                         })}
-                    </div>
+                    </div>)
                 }
             </div>
 
             <div class="player">
                 <div class="status">
                     <div class="playertag">PLAYER</div>
-                    <div class="playerScore">{phase !== 1 ? 0 :scoreP}</div>
+                    <div class="playerScore">{phase === 0 || phase === 2 ? 0 :scoreP}</div>
                 </div>
-                {phase !== 1 || deckP.length === 0?
+                {phase === 0 || phase === 2 || deckP.length === 0?
                     <></>
                 :
                     <div class="playerCard">
                         {deckP.map((card,index) => {
                             return (
-                                <div class="card">
+                                <div class="card" key={index}>
                                     <div class={card[1]}>
                                         <div class="card-number">{number(card[0])}</div>
                                         <div class="card-icon">

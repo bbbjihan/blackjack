@@ -56,6 +56,21 @@
     position: relative;
     width: 65px;
 }
+
+.cardBack {
+    background-color: grey;
+    background-image: repeating-linear-gradient(-45deg, transparent, transparent 1px, black 1px, black 2px)
+    , repeating-linear-gradient(45deg, transparent, transparent 1px, black 1px, black 2px);
+    border: 1px solid #000;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    display: inline-block;
+    font-size: 20px;
+    height: 100px;
+    margin: 10px;
+    position: relative;
+    width: 65px;
+}
   
 .spade, .clover {
     color: #000;
