@@ -14,6 +14,12 @@ const Choose = ({money, setMoney, bet, setBet, phase, setPhase, inform, setInfor
         setDeck((prev) => {return[...shuffling]});
     }
 
+    const cardDraw = (deck, setDeck, setHand) => {
+        let tmp = deck;
+        setHand((prev) => {return[...prev] + [tmp.shift()]});
+        setDeck(tmp);
+    }
+
     const betAdjustUP = () => {
         if(betting <= money - 10) setBetting((prev) => {return (prev + 10)});
     }
@@ -31,7 +37,8 @@ const Choose = ({money, setMoney, bet, setBet, phase, setPhase, inform, setInfor
             .then(cardShuffle)
             .then(function(){
                 setPhase(1);
-                setInform("액션을 선택해주세요.")
+                setInform("액션을 선택해주세요.");
+                setTimeout(function(){console.log(deck)},3000);
             })
     }
 
@@ -41,17 +48,6 @@ const Choose = ({money, setMoney, bet, setBet, phase, setPhase, inform, setInfor
             tmpSum += x[0];
         })
         setScore(tmpSum);
-    }
-
-    const distD = () => {
-        let tmpDeck = deck;
-        setDeckD((prev)=>{return[...prev] + [tmpDeck.pop()]});
-        setDeck(tmpDeck);
-        getScore(setScoreD, deckD);
-    }
-
-    const distP = () => {
-        
     }
     
     return(
