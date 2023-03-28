@@ -5,23 +5,33 @@ import { betState, DeckState, DhandState, DscoreState, informState, moneyState, 
 import './Choose.css';
 
 const Choose = () => {
-    const [money, setMoney] = useRecoilState(moneyState);
-    const setBet = useSetRecoilState(betState);
-    const [phase, setPhase] = useRecoilState(phaseState);
     const setInform = useSetRecoilState(informState);
-    const [Dscore, setDscore] = useRecoilState(DscoreState);
-    const [Pscore, setPscore] = useRecoilState(PscoreState);
-    const [Dhand, setDhand] = useRecoilState(DhandState);
-    const [Phand, setPhand] = useRecoilState(PhandState);
-    const [Deck, setDeck] = useRecoilState(DeckState);
     const [betting, setBetting] = useState(10);
-    let deck = [];
-    let dealerScore = 0;
-    let playerScore = 0;
+    const [bet, setBet] = useRecoilState(betState);
+    const [money, setMoney] = useRecoilState(moneyState);
+    const [phase, setPhase] = useRecoilState(phaseState);
+    const [Deck, setDeck] = useRecoilState(DeckState);
+    const [Phand, setPhand] = useRecoilState(PhandState);
+    const [Dhand, setDhand] = useRecoilState(DhandState);
+    const [Pscore, setPscore] = useRecoilState(PscoreState);
+    const [Dscore, setDscore] = useRecoilState(DscoreState);
 
-    const wait = (timeToDelay) => new Promise((resolve) => setTimeout(resolve, timeToDelay));
+    const wait = (Sec) => new Promise((resolve) => setTimeout(resolve, Sec * 1000));
 
-    const cardShuffle = async() => {
+    const BET = () => {
+        setPhand([]);
+        setDhand([]);
+        setPscore(0);
+        setDscore(0);
+        setBet(betting);
+        setMoney(money - betting);
+        setBetting(10);
+        setPhase(2);
+        setController("DrawPhase");
+    }
+
+    const cardShuffle = () => {
+        console.log("cardShuffle");
         setPhase(2);
         setInform("Shuffling...");
         let shuffling = [["A","spade"],[2,"spade"],[3,"spade"],[4,"spade"],[5,"spade"],[6,"spade"],[7,"spade"],[8,"spade"],[9,"spade"],[10,"spade"],["J","spade"],["Q","spade"],["K","spade"],["A","diamond"],[2,"diamond"],[3,"diamond"],[4,"diamond"],[5,"diamond"],[6,"diamond"],[7,"diamond"],[8,"diamond"],[9,"diamond"],[10,"diamond"],["J","diamond"],["Q","diamond"],["K","diamond"],["A","heart"],[2,"heart"],[3,"heart"],[4,"heart"],[5,"heart"],[6,"heart"],[7,"heart"],[8,"heart"],[9,"heart"],[10,"heart"],["J","heart"],["Q","heart"],["K","heart"],["A","clover"],[2,"clover"],[3,"clover"],[4,"clover"],[5,"clover"],[6,"clover"],[7,"clover"],[8,"clover"],[9,"clover"],[10,"clover"],["J","clover"],["Q","clover"],["K","clover"]];
@@ -29,174 +39,242 @@ const Choose = () => {
             const j = Math.floor(Math.random() * (i + 1));
             [shuffling[i], shuffling[j]] = [shuffling[j], shuffling[i]];
         }
+        setDeck(shuffling);
         return shuffling;
     }
 
-    const cardDraw = async(owner) => {
-        setPhase(3);
-        const draw = deck.shift();
-        if(owner === "DEALER"){
-            setDhand((prev)=>[...prev,draw]);
-            if(draw[0] === 'A'){
-                dealerScore += 11;
-            }else if(draw[0] === 'J' || draw[0] === 'Q' || draw[0] === 'K'){
-                dealerScore += 10;
-            }else{
-                dealerScore += draw[0];
-            }
-        }else{
-            setPhand((prev)=>[...prev,draw]);
-            if(draw[0] === 'A'){
-                playerScore += 11;
-            }else if(draw[0] === 'J' || draw[0] === 'Q' || draw[0] === 'K'){
-                playerScore += 10;
-            }else{
-                playerScore += draw[0];
-            }
-        }
-        setInform(owner + "'s draw, " + draw[0] + " " + draw[1]);
+    const playerDraw = (deck) => {
+        console.log("playerDraw");
+        let tmp = [...deck];
+        let draw = tmp.shift();
+        console.log(draw);
+        setPhand((prev)=>[...prev,draw]);
+        setDeck(tmp);
+        setInform("PLAYER, " + draw[0] + " " + draw[1]);
+        return tmp;
     }
 
-    const BET = async() => {
-        setBet(betting);
-        setMoney(money - betting);
-        setBetting(10);
-        if(!deck.length){
-            deck = await cardShuffle()
-            .then(await wait(1000));
-        }
-        await cardDraw("PLAYER");
-        await wait(1000);
-        if(!deck.length){
-            deck = await cardShuffle()
-            .then(await wait(1000));
-        }
-        await cardDraw("DEALER");
-        await wait(1000);
-        if(!deck.length){
-            deck = await cardShuffle()
-            .then(await wait(1000));
-        }
-        await cardDraw("PLAYER");
-        await wait(1000);
-        await actionPhase();
-        console.log(playerScore);
+    const dealerDraw = (deck) => {
+        console.log("dealerDraw");
+        let tmp = [...deck];
+        let draw = tmp.shift();
+        console.log(draw);
+        setDhand((prev)=>[...prev,draw]);
+        setDeck(tmp);
+        setInform("DEALER, " + draw[0] + " " + draw[1]);
+        return tmp;
     }
 
-    const actionPhase = async() => {
-        if(playerScore > 21){
-            playerBurst();
-            setPhase(5);
-        }else if(playerScore === 21){
-            setPhase(11);
-            setInform("PLAYER BLACK JACK.");
-            await wait(1000);
-            dealerOpen();
+    const DrawPhase = async() => {
+        console.log("DrawPhase");
+        let deck = [...Deck];
+        if(!deck.length){
+            deck = cardShuffle();
+            await wait(1);
+        }
+        deck = playerDraw(deck);
+        await wait(1);
+        if(!deck.length){
+            deck = cardShuffle();
+            await wait(1);
+        }
+        deck = dealerDraw(deck);
+        await wait(1);
+        if(!deck.length){
+            deck = cardShuffle();
+            await wait(1);
+        }
+        deck = playerDraw(deck);
+        await wait(1);
+        setController("ActionPhase");
+    }
+
+    const ActionPhase = () => {
+        console.log("ActionPhase");
+        setPhase(11);
+        if(Pscore === 21){
+            setController("DealerOpen");
+        }else if(Pscore > 21){
+            setController("PlayerBust");
         }else{
+            setInform("액션을 선택하세요.");
             setPhase(1);
-            setInform("액션을 선택해주세요.");
-            setDeck(deck);
         }
     }
 
     const HIT = async() => {
-
-    }
-
-    const STAND = async() => {
-        setPhase(4);
-        deck = Deck;
-        playerScore = Pscore;
-        dealerScore = Dscore;
-        console.log(Deck, playerScore, dealerScore);
+        console.log("HIT");
+        setPhase(11);
+        setInform("HIT, playerDraw");
+        await wait(1);
+        let deck = [...Deck];
         if(!deck.length){
-            deck = await cardShuffle()
-            .then(await wait(1000));
+            deck = cardShuffle();
+            await wait(1);
         }
-        cardDraw("DEALER");
-        await wait(1000);
+        deck = playerDraw(deck);
+        await wait(1);
+        setController("PlayerCheck");
     }
 
-    const dealerOpen = async() => {
-        setPhase(4);
-        if(!deck.length){
-            deck = await cardShuffle()
-            .then(await wait(1000));
-        }
-        await cardDraw("DEALER");
-        await wait(1000);
-        while(dealerDrawFlag() === 0){
-            if(!deck.length){
-                deck = await cardShuffle()
-                .then(await wait(1000));
-            }
-            await cardDraw("DEALER");
-            await wait(1000);
-        }
-        if(dealerScore === 21) dealerBJ();
-        else if(playerScore === 21) playerBJ();
-        else if(dealerDrawFlag() === 1) dealerBurst();
-        else whoWin();
-    }
-
-    const dealerDrawFlag = () => {
-        if(dealerScore < 17){
-            return 0;
-        }else if(dealerScore > 21){
-            return 1;
+    const playerCheck = () => {
+        console.log("PlayerCheck");
+        if(Pscore === 21){
+            setController("DealerOpen");
+        }else if(Pscore > 21){
+            setController("PlayerBust");
         }else{
-            return 2;
+            setInform("액션을 선택하세요.");
+            setPhase(1);
+            setController("");
+        }
+    }
+
+    const STAND = () => {
+        console.log("STAND");
+        setController("DealerOpen");
+    }
+
+    const DealerOpen = async() => {
+        console.log("DealerOpen");
+        setPhase(11);
+        setInform("STAND, DEALER OPEN.");
+        await wait(0.5);
+        setInform("STAND, DEALER OPEN..");
+        await wait(0.5);
+        setInform("STAND, DEALER OPEN...");
+        await wait(0.5);
+        setPhase(4);
+        let deck = [...Deck];
+        if(!deck.length){
+            deck = cardShuffle();
+            await wait(1);
+        }
+        deck = dealerDraw(deck);
+        setController("DealerCheck");
+    }
+
+    const DealerCheck = async() => {
+        console.log("DealerCheck");
+        if(Dscore < 17){
+            console.log("<17, Redraw.");
+            setController("");
+            await wait(1);
+            let deck = [...Deck];
+            if(!deck.length){
+                deck = cardShuffle();
+                await wait(1);
+            }
+            deck = dealerDraw(deck);
+            setController("DealerCheck");
+        }else if(Dscore > 21){
+            await wait(1);
+            setController("DealerBust");
+        }else{
+            await wait(1);
+            setController("WhoWin");
         }
     }
 
     const whoWin = () => {
-        let D = 21 - dealerScore;
-        let P = 21 - playerScore;
-        if(P < D){
-            playerWin();
+        console.log("WhoWin");
+        if(Dscore === 21){
+            setController("DealerBJ");
+        }else if(Pscore === 21){
+            setController("PlayerBJ");
         }else{
-            dealerWin();
+            if(Pscore > Dscore){
+                setController("PlayerWin");
+            }else{
+                setController("DealerWin");
+            }
         }
     }
 
-    const playerBurst = () => {
-        setInform("PLAYER BURST.");
+    const playerBust = async() => {
+        console.log("playerBust");
+        let deck = [...Deck];
+        if(!deck.length){
+            deck = cardShuffle();
+            await wait(1);
+        }
+        deck = dealerDraw(deck);
+        setInform("PLAYER BUST.");
         setPhase(5);
+        setBet(0);
     }
 
-    const dealerBurst = () => {
-        setInform("DEALER BURST.");
+    const dealerBust = () => {
+        console.log("dealerBust");
+        let earning = bet * 2;
+        setInform("DEALER BUST. +" + earning + " G.");
+        setMoney(money + earning);
+        setBet(0);
         setPhase(6);
     }
 
     const playerWin = () => {
-        setInform("PLAYER WIN.");
+        console.log("playerWin");
+        let earning = bet * 2;
+        setInform("PLAYER WIN. +" + earning + " G.");
+        setMoney(money + earning);
+        setBet(0);
         setPhase(7);
     }
 
     const dealerWin = () => {
+        console.log("dealerWin");
         setInform("DEALER WIN.");
+        setBet(0);  
         setPhase(8);
     }
 
     const playerBJ = () => {
-        setInform("PLAYER BLACK JACK.");
+        console.log("palyerBJ");
+        let earning = bet * 2.5;
+        setInform("PLAYER BLACKJACK. +" + earning + " G.");
+        setMoney(money + earning);
+        setBet(0);  
         setPhase(9);
     }
 
     const dealerBJ = () => {
+        console.log("dealerBJ");
         setInform("DEALER BLACK JACK.");
+        setBet(0);  
         setPhase(10);
     }
 
-    const betAdjustUP = () => {
-        if(betting <= money - 10) setBetting((prev) => {return (prev + 10)});
-    }
+    const [controller, setController] = useState("");
 
-    const betAdjustDW = () => {
-        if(betting >= 20) setBetting((prev) => {return (prev - 10)});
-    }
-    
+    useEffect(()=>{
+        if(controller === "DrawPhase"){
+            DrawPhase();
+        }else if(controller === "ActionPhase"){
+            ActionPhase();
+        }else if(controller === "PlayerCheck"){
+            playerCheck();
+        }else if(controller === "DealerOpen"){
+            DealerOpen();
+        }else if(controller === "DealerCheck"){
+            DealerCheck();
+        }else if(controller === "PlayerBust"){
+            playerBust();
+        }else if(controller === "DealerBust"){
+            dealerBust();
+        }else if(controller === "PlayerWin"){
+            playerWin();
+        }else if(controller === "DealerWin"){
+            dealerWin();
+        }else if(controller === "PlayerBJ"){
+            playerBJ();
+        }else if(controller === "DealerBJ"){
+            dealerBJ();
+        }else if(controller === "WhoWin"){
+            whoWin();
+        }
+    },[controller]);
+
     const calculateHand = (hand) => {
         let tmp = 0;
         if(hand.length !== 0){
@@ -218,13 +296,21 @@ const Choose = () => {
         setPscore(calculateHand(Phand));
     },[Phand, Dhand, setDscore, setPscore]);
 
+    const betUP = () => {
+        if(betting <= money - 10) setBetting(betting + 10);
+    }
+
+    const betDW = () => {
+        if(betting >= 20) setBetting(betting - 10);
+    }
+
     return(
         <div>
             <div class="chooseBar">
-                {phase === 0 ?
+                {phase === 0 || (phase > 4 && phase < 11)?
                     <div class="betPhase">
-                        <div class="betAdjust" onClick={betAdjustUP}>↑</div>
-                        <div class="betAdjust" onClick={betAdjustDW}>↓</div>
+                        <div class="betAdjust" onClick={betUP}>↑</div>
+                        <div class="betAdjust" onClick={betDW}>↓</div>
                         <div class="betting">{betting} G</div>
                         <div class="button" onClick={BET}>BET</div>
                     </div>

@@ -1,6 +1,7 @@
 .informBar {
     background-color: #007700;
     min-width: 300px;
+    min-height: 43px;
     display: flex;
     margin: 10px;
     border: 1px solid #fff;
