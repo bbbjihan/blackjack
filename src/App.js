@@ -1,9 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
-import Choose from './components/Choose';
-import Inform from './components/Inform';
-import Status from './components/Status';
-import Table from './components/Table';
+import BlackJack from './BlackJack';
 
 function App() {
   return (
@@ -11,10 +8,7 @@ function App() {
       <div className="App">
         <div class="app">
           <Routes>
-            <Route path="/" element={<Status/>}/>
-            <Route path="/" element={<Table/>}/>
-            <Route path="/" element={<Inform/>}/>
-            <Route path="/" element={<Choose/>}/>
+            <Route path="/" element={<BlackJack/>}/>
           </Routes>
         </div>
       </div>
