@@ -1,3 +1,4 @@
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
 import Choose from './components/Choose';
 import Inform from './components/Inform';
@@ -6,14 +7,18 @@ import Table from './components/Table';
 
 function App() {
   return (
-    <div className="App">
-      <div class="app">
-        <Status/>
-        <Table/>
-        <Inform/>
-        <Choose/>
+    <BrowserRouter>
+      <div className="App">
+        <div class="app">
+          <Routes>
+            <Route path="/" element={<Status/>}/>
+            <Route path="/" element={<Table/>}/>
+            <Route path="/" element={<Inform/>}/>
+            <Route path="/" element={<Choose/>}/>
+          </Routes>
+        </div>
       </div>
-    </div>
+    </BrowserRouter>
   );
 }
 
