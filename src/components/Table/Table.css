@@ -53,6 +53,8 @@
     font-size: 20px;
     height: 100px;
     margin: 10px;
+    margin-left: -21px;
+    margin-right: -21px;
     position: relative;
     width: 65px;
 }
@@ -68,6 +70,8 @@
     font-size: 20px;
     height: 100px;
     margin: 10px;
+    margin-left: -21px;
+    margin-right: -21px;
     position: relative;
     width: 65px;
 }
@@ -79,24 +83,28 @@
 .heart, .diamond {
     color: red;
 }
-  
-.card .card-number {
-    font-size: 40px;
+
+.card .card-side {
+    display:flex;
+    flex-direction:column;
+    position: absolute;
+    margin-left: 5px;
+}
+
+.card .card-side .card-number {
+    margin-left: -1px;
+    font-weight:bold;
+}
+
+.card .card-side .card-icon {
+    margin-left: -1px;
+    margin-top: -10px;
+}
+
+.card .card-center {
+    font-size: 50px;
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
-}
-  
-.card .card-icon:before {
-    content: '';
-    display: inline-block;
-    margin-right: 5px;
-    vertical-align: middle;
-}
-  
-.card .card-icon {
-    display: inline-block;
-    font-size: 20px;
-    vertical-align: middle;
+    transform: translate(-33%, -50%);
 }
