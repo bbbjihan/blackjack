@@ -1,7 +1,11 @@
 import React from "react";
+import { useRecoilValue } from "recoil";
+import { betState, moneyState } from "../../Atom";
 import './Status.css';
 
-const Status = ({money, setMoney, bet, setBet, phase, setPhase}) => {
+const Status = () => {
+    const money = useRecoilValue(moneyState);
+    const bet = useRecoilValue(betState);
     return(
         <div>
             <div class="statusBar">
