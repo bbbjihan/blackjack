@@ -1,0 +1,53 @@
+.wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    min-width: 100%;
+    position:fixed;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+.Modal {
+    width: 250px;
+    height: 200px;
+    z-index: 10;
+    background-color:rgba(170, 77, 77);
+    border: 1px solid #000000;
+    border-radius: 5px;
+    display: flex;
+    flex-direction:column;
+    color: white;
+}
+
+.Modal .ModalTitle {
+    padding-top:30px;
+    padding-bottom:25px;
+    font-size: 35px;
+    width: 100%;
+    text-align: center;
+}
+
+.Modal .ModalContent {
+    padding-bottom:20px;
+    width: 100%;
+    text-align: center;
+}
+
+.Modal .ModalButtonLine {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.Modal .ModalButtonLine .ModalButton {
+    width: 50px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    background-color: rgb(167, 119, 119);
+    border: 1px solid white;
+    border-radius: 5px;
+}

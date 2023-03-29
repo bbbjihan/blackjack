@@ -8,13 +8,13 @@ const Inform = () => {
     const inform = useRecoilValue(informState);
     return(
         <div>
-            <div class="informBar">
+            <div className="informBar">
                 {phase === 0 ? 
-                    <div class="content">
+                    <div className="content">
                         배팅액을 선택하세요.
                     </div>
                     :
-                    <div class="content">
+                    <div className="content">
                         {inform}
                     </div>
                 }

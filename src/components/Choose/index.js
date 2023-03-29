@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import '../../Atom';
-import { betState, DeckState, DhandState, DscoreState, informState, moneyState, PhandState, phaseState, PscoreState } from '../../Atom';
+import { betState, DeckState, DhandState, DscoreState, GameOverState, informState, moneyState, PhandState, phaseState, PscoreState } from '../../Atom';
 import './Choose.css';
 
 const Choose = () => {
     const setInform = useSetRecoilState(informState);
+    const setGameOver = useSetRecoilState(GameOverState);
     const [betting, setBetting] = useState(10);
     const [bet, setBet] = useRecoilState(betState);
     const [money, setMoney] = useRecoilState(moneyState);
@@ -21,8 +22,8 @@ const Choose = () => {
     const BET = () => {
         setPhand([]);
         setDhand([]);
-        setPscore(0);
-        setDscore(0);
+        setPscore([0]);
+        setDscore([0]);
         setBet(betting);
         setMoney(money - betting);
         setBetting(10);
@@ -92,9 +93,9 @@ const Choose = () => {
     const ActionPhase = () => {
         console.log("ActionPhase");
         setPhase(11);
-        if(Pscore === 21){
+        if(Pscore.includes(21)){
             setController("DealerOpen");
-        }else if(Pscore > 21){
+        }else if(!Pscore.some((e)=> e < 21)){
             setController("PlayerBust");
         }else{
             setInform("액션을 선택하세요.");
@@ -119,9 +120,9 @@ const Choose = () => {
 
     const playerCheck = () => {
         console.log("PlayerCheck");
-        if(Pscore === 21){
+        if(Pscore.includes(21)){
             setController("DealerOpen");
-        }else if(Pscore > 21){
+        }else if(!Pscore.some((e)=> e < 21)){
             setController("PlayerBust");
         }else{
             setInform("액션을 선택하세요.");
@@ -156,7 +157,10 @@ const Choose = () => {
 
     const DealerCheck = async() => {
         console.log("DealerCheck");
-        if(Dscore < 17){
+        if(Dscore.every((e) => e > 21)){
+            await wait(1);
+            setController("DealerBust");
+        }else if(!Dscore.some((e)=> e >= 17 && e <= 21)){
             console.log("<17, Redraw.");
             setController("");
             await wait(1);
@@ -167,9 +171,6 @@ const Choose = () => {
             }
             deck = dealerDraw(deck);
             setController("DealerCheck");
-        }else if(Dscore > 21){
-            await wait(1);
-            setController("DealerBust");
         }else{
             await wait(1);
             setController("WhoWin");
@@ -178,12 +179,14 @@ const Choose = () => {
 
     const whoWin = () => {
         console.log("WhoWin");
-        if(Dscore === 21){
+        if(Dscore.includes(21)){
             setController("DealerBJ");
-        }else if(Pscore === 21){
+        }else if(Pscore.includes(21)){
             setController("PlayerBJ");
         }else{
-            if(Pscore > Dscore){
+            let P = Math.max(...Pscore.filter((x)=>x<21));
+            let D = Math.max(...Dscore.filter((x)=>x<21));
+            if(P > D){
                 setController("PlayerWin");
             }else{
                 setController("DealerWin");
@@ -202,6 +205,8 @@ const Choose = () => {
         setInform("PLAYER BUST.");
         setPhase(5);
         setBet(0);
+        setController("");
+        if(money < 10)setGameOver(true);
     }
 
     const dealerBust = () => {
@@ -211,6 +216,7 @@ const Choose = () => {
         setMoney(money + earning);
         setBet(0);
         setPhase(6);
+        setController("");
     }
 
     const playerWin = () => {
@@ -220,6 +226,7 @@ const Choose = () => {
         setMoney(money + earning);
         setBet(0);
         setPhase(7);
+        setController("");
     }
 
     const dealerWin = () => {
@@ -227,6 +234,8 @@ const Choose = () => {
         setInform("DEALER WIN.");
         setBet(0);  
         setPhase(8);
+        setController("");
+        if(money < 10)setGameOver(true);
     }
 
     const playerBJ = () => {
@@ -236,13 +245,16 @@ const Choose = () => {
         setMoney(money + earning);
         setBet(0);  
         setPhase(9);
+        setController("");
     }
 
     const dealerBJ = () => {
         console.log("dealerBJ");
         setInform("DEALER BLACK JACK.");
-        setBet(0);  
+        setBet(0);
         setPhase(10);
+        setController("");
+        if(money < 10)setGameOver(true);
     }
 
     const [controller, setController] = useState("");
@@ -276,15 +288,16 @@ const Choose = () => {
     },[controller]);
 
     const calculateHand = (hand) => {
-        let tmp = 0;
+        let tmp = [0];
         if(hand.length !== 0){
             for(let i = 0; i < hand.length; i++){
                 if(hand[i][0] === 'A'){
-                    tmp += 11;
+                    for(let j = 0; j < tmp.length; j++) tmp[j]+=1;
+                    tmp.push(tmp[tmp.length - 1] + 10);
                 }else if(hand[i][0] === 'J' || hand[i][0] === 'Q' || hand[i][0] === 'K'){
-                    tmp += 10;
+                    for(let j = 0; j < tmp.length; j++) tmp[j]+=10;
                 }else{
-                    tmp += hand[i][0];
+                    for(let j = 0; j < tmp.length; j++) tmp[j]+=hand[i][0];
                 }
             }
         }
@@ -306,20 +319,20 @@ const Choose = () => {
 
     return(
         <div>
-            <div class="chooseBar">
+            <div className="chooseBar">
                 {phase === 0 || (phase > 4 && phase < 11)?
-                    <div class="betPhase">
-                        <div class="betAdjust" onClick={betUP}>↑</div>
-                        <div class="betAdjust" onClick={betDW}>↓</div>
-                        <div class="betting">{betting} G</div>
-                        <div class="button" onClick={BET}>BET</div>
+                    <div className="betPhase">
+                        <div className="betAdjust" onClick={betUP}>↑</div>
+                        <div className="betAdjust" onClick={betDW}>↓</div>
+                        <div className="betting">{betting} G</div>
+                        <div className="button" onClick={BET}>BET</div>
                     </div>
                     :
                     phase === 1 ?
                     (
-                    <div class="openedPhase">
-                        <div class="button" onClick={HIT}>HIT</div>
-                        <div class="button" onClick={STAND}>STAND</div>
+                    <div className="openedPhase">
+                        <div className="button" onClick={HIT}>HIT</div>
+                        <div className="button" onClick={STAND}>STAND</div>
                     </div>
                     )
                     :

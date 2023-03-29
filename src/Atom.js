@@ -33,15 +33,20 @@ export const PhandState = atom({
   
 export const DscoreState = atom({
     key: 'Dscore',
-    default: 0,
+    default: [0],
 })
   
 export const PscoreState = atom({
     key: 'Pscore',
-    default: 0,
+    default: [0],
 })
   
 export const informState = atom({
     key: 'inform',
     default: '',
+})
+
+export const GameOverState = atom({
+    key: 'GameOver',
+    default: false,
 })
