@@ -53,58 +53,7 @@
     font-size: 20px;
     height: 100px;
     margin: 10px;
-    margin-left: -21px;
-    margin-right: -21px;
+    margin-left: -15px;
+    margin-right: -25px;
     position: relative;
-    width: 65px;
-}
-
-.cardBack {
-    background-color: grey;
-    background-image: repeating-linear-gradient(-45deg, transparent, transparent 1px, black 1px, black 2px)
-    , repeating-linear-gradient(45deg, transparent, transparent 1px, black 1px, black 2px);
-    border: 1px solid #000;
-    border-radius: 5px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-    display: inline-block;
-    font-size: 20px;
-    height: 100px;
-    margin: 10px;
-    margin-left: -21px;
-    margin-right: -21px;
-    position: relative;
-    width: 65px;
-}
-  
-.spade, .clover {
-    color: #000;
-}
-  
-.heart, .diamond {
-    color: red;
-}
-
-.card .card-side {
-    display:flex;
-    flex-direction:column;
-    position: absolute;
-    margin-left: 5px;
-}
-
-.card .card-side .card-number {
-    margin-left: -1px;
-    font-weight:bold;
-}
-
-.card .card-side .card-icon {
-    margin-left: -1px;
-    margin-top: -10px;
-}
-
-.card .card-center {
-    font-size: 50px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-33%, -50%);
 }

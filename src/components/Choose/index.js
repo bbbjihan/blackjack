@@ -98,7 +98,7 @@ const Choose = () => {
         }else if(!Pscore.some((e)=> e < 21)){
             setController("PlayerBust");
         }else{
-            setInform("액션을 선택하세요.");
+            setInform("CHOOSE THE ACTION.");
             setPhase(1);
         }
     }
@@ -159,7 +159,11 @@ const Choose = () => {
         console.log("DealerCheck");
         if(Dscore.every((e) => e > 21)){
             await wait(1);
-            setController("DealerBust");
+            if(Pscore.includes(21)){
+                setController("PlayerBJ");
+            }else{
+                setController("DealerBust");
+            }
         }else if(!Dscore.some((e)=> e >= 17 && e <= 21)){
             console.log("<17, Redraw.");
             setController("");
@@ -309,12 +313,15 @@ const Choose = () => {
         setPscore(calculateHand(Phand));
     },[Phand, Dhand, setDscore, setPscore]);
 
-    const betUP = () => {
-        if(betting <= money - 10) setBetting(betting + 10);
+    const betAdd = (value) => {
+        if(betting <= money - value) setBetting(betting + value);
+    }
+    const betAI = () => {
+        setBetting(money);
     }
 
-    const betDW = () => {
-        if(betting >= 20) setBetting(betting - 10);
+    const betRE = () => {
+        setBetting(10);
     }
 
     return(
@@ -322,9 +329,24 @@ const Choose = () => {
             <div className="chooseBar">
                 {phase === 0 || (phase > 4 && phase < 11)?
                     <div className="betPhase">
-                        <div className="betAdjust" onClick={betUP}>↑</div>
-                        <div className="betAdjust" onClick={betDW}>↓</div>
-                        <div className="betting">{betting} G</div>
+                        <div className="betAdjustBox">
+                            <div className="betAdjustBoxLine">
+                                <div className="betAdjust" onClick={()=>{betAdd(10)}}>+10</div>
+                                <div className="betAdjust" onClick={()=>{betAdd(10000)}}>+10K</div>
+                            </div>
+                            <div className="betAdjustBoxLine">
+                                <div className="betAdjust" onClick={()=>{betAdd(100)}}>+100</div>
+                                <div className="betAdjust" onClick={betAI}>ALLIN</div>
+                            </div>
+                            <div className="betAdjustBoxLine">
+                                <div className="betAdjust" onClick={()=>{betAdd(1000)}}>+1K</div>
+                                <div className="betAdjust" onClick={betRE}>RESET</div>
+                            </div>
+                        </div>
+                        <div className="betting">
+                            <div>{betting}</div>
+                            <div>　G</div>
+                        </div>
                         <div className="button" onClick={BET}>BET</div>
                     </div>
                     :

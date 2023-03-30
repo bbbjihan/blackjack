@@ -10,12 +10,12 @@ const Status = () => {
         <div>
             <div className="statusBar">
                 <div className="box">
-                    <div className="name">보유금</div>
+                    <div className="name">BALANCE</div>
                     <div className="value">{money}</div>
                     <div className="unit">G</div>
                 </div>
                 <div className="box">
-                    <div className="name">배팅금</div>
+                    <div className="name">BETTING</div>
                     <div className="value">{bet}</div>
                     <div className="unit">G</div>
                 </div>

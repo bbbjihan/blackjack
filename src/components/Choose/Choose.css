@@ -12,45 +12,57 @@
 
 .chooseBar .betPhase {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
+    padding-left: 10px;
+    padding-right: 5px;
 }
 
 .chooseBar .betPhase .betting {
     height: 20px;
-    min-width: 70px;
+    min-width: 60px;
     line-height: 20px;
-    margin: 20px;
+    margin-top: 20px;
     padding: 5px;
     padding-left: 10px;
-    margin-right: 0px;
+    padding-right: 10px;
     border-radius: 5px;
-    width: 50px;
     color: #fff;
     border: 1px solid #fff;
     border-radius: 5px;
     overflow-y:hidden;
-}
-
-.chooseBar .betPhase .betAdjust {
-    border: 1px solid #fff;
-    border-radius: 5px;
-    width: 20px;
-    height: 20px;
-    line-height: 20px;
-    margin: 5px;
-    margin-top: 20px;
-    padding: 5px;
-    text-align: center;
-    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
 }
 
 .chooseBar .betPhase .button {
     height: 20px;
     width: 30px;
     line-height: 20px;
-    margin: 20px;
-    margin-right: 5px;
+    margin-top: 20px;
     padding: 5px;
+}
+
+.chooseBar .betPhase .betAdjustBox {
+    display: flex;
+    margin-top: 5px;
+}
+
+.chooseBar .betPhase .betAdjustbox .betAdjustBoxLine {
+    display: flex;
+    height: 20px;
+}
+
+.chooseBar .betPhase .betAdjust {
+    border: 1px solid #fff;
+    border-radius: 5px;
+    width: 30px;
+    height: 20px;
+    margin: 5px;
+    line-height: 20px;
+    text-align: center;
+    font-size: 10px;
+    color: #fff;
 }
 
 .chooseBar .openedPhase {

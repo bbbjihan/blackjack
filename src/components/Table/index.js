@@ -3,16 +3,18 @@ import { useRecoilValue } from "recoil";
 import { DhandState, DscoreState, PhandState, phaseState, PscoreState } from "../../Atom";
 import './Table.css';
 
-
 const Table = () => {
-    const icon = (value) => {
-        if (value === "spade") return "♠";
-        if (value === "diamond") return "♦";
-        if (value === "heart") return "♥";
-        if (value === "clover") return "♣";
-    }
-    const number = (value) => {
-        return value;
+
+    const getCardImage = (cardNumber, cardSuit) => {
+        let N = '';
+        if(cardNumber === 10) N = 0;
+        else N = `${cardNumber}`;
+        let S = '';
+        if(cardSuit === 'clover') S = 'C';
+        else if(cardSuit === 'spade') S = 'S';
+        else if(cardSuit === 'heart') S = 'H';
+        else if(cardSuit === 'diamond') S = 'D';
+        return N + S;
     }
     const phase = useRecoilValue(phaseState);
     const Dhand = useRecoilValue(DhandState);
@@ -40,27 +42,19 @@ const Table = () => {
                         <div className="dealerCard">
                             <div className="card">
                                     <div className={Dhand[0][1]}>
-                                        <div className="card-side">
-                                            <div className="card-number" style={Dhand[0][0] === 10 ? {'fontSize' : '20px', 'marginLeft' : '-5px'} : {}}>{number(Dhand[0][0])}</div>
-                                            <div className="card-icon">{icon(Dhand[0][1])}</div>
-                                        </div>
-                                        <div className="card-center">{icon(Dhand[0][1])}</div>
+                                        <img height="100px" margin="10px" src={require(`../../image/cards/${getCardImage(Dhand[0][0],Dhand[0][1])}.png`)} alt={getCardImage(Dhand[0][0],Dhand[0][1])}/>
                                     </div>
                             </div>
-                            <div className="cardBack"></div>
+                            <div className="card">
+                                <img height="100px" margin="10px" src={require(`../../image/cards/back.png`)} alt='back'/>
+                            </div>
                         </div>
                         :
                     (<div className="dealerCard">
                         {Dhand.map((card,index) => {
                             return (
                                 <div className="card" key={index}>
-                                    <div className={card[1]}>
-                                        <div className="card-side">
-                                            <div className="card-number" style={card[0] === 10 ? {'fontSize' : '20px', 'marginLeft' : '-5px'} : {}}>{number(card[0])}</div>
-                                            <div className="card-icon">{icon(card[1])}</div>
-                                        </div>
-                                        <div className="card-center">{icon(card[1])}</div>
-                                    </div>
+                                    <img height="100px" margin="10px" src={require(`../../image/cards/${getCardImage(card[0],card[1])}.png`)} alt={getCardImage(card[0],card[1])}/>
                                 </div>
                             );
                         })}
@@ -87,13 +81,7 @@ const Table = () => {
                         {Phand.map((card,index) => {
                             return (
                                 <div className="card" key={index}>
-                                    <div className={card[1]}>
-                                        <div className="card-side">
-                                            <div className="card-number" style={card[0] === 10 ? {'fontSize' : '20px', 'marginLeft' : '-5px'} : {}}>{number(card[0])}</div>
-                                            <div className="card-icon">{icon(card[1])}</div>
-                                        </div>
-                                        <div className="card-center">{icon(card[1])}</div>
-                                    </div>
+                                    <img height="100px" margin="10px" src={require(`../../image/cards/${getCardImage(card[0],card[1])}.png`)} alt={getCardImage(card[0],card[1])}/>
                                 </div>
                             );
                         })}
