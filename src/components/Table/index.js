@@ -42,11 +42,11 @@ const Table = () => {
                         <div className="dealerCard">
                             <div className="card">
                                     <div className={Dhand[0][1]}>
-                                        <img height="100px" margin="10px" src={require(`../../image/cards/${getCardImage(Dhand[0][0],Dhand[0][1])}.png`)} alt={getCardImage(Dhand[0][0],Dhand[0][1])}/>
+                                        <img height="100px" margin="10px" src={require(`../../image/cards/${getCardImage(Dhand[0][0],Dhand[0][1])}.svg`)} alt={getCardImage(Dhand[0][0],Dhand[0][1])}/>
                                     </div>
                             </div>
                             <div className="card">
-                                <img height="100px" margin="10px" src={require(`../../image/cards/back.png`)} alt='back'/>
+                                <img height="98px" margin="10px" src={require(`../../image/cards/back.png`)} alt='back'/>
                             </div>
                         </div>
                         :
@@ -54,7 +54,7 @@ const Table = () => {
                         {Dhand.map((card,index) => {
                             return (
                                 <div className="card" key={index}>
-                                    <img height="100px" margin="10px" src={require(`../../image/cards/${getCardImage(card[0],card[1])}.png`)} alt={getCardImage(card[0],card[1])}/>
+                                    <img height="100.8" src={require(`../../image/cards/${getCardImage(card[0],card[1])}.svg`)} alt={getCardImage(card[0],card[1])}/>
                                 </div>
                             );
                         })}
@@ -81,7 +81,7 @@ const Table = () => {
                         {Phand.map((card,index) => {
                             return (
                                 <div className="card" key={index}>
-                                    <img height="100px" margin="10px" src={require(`../../image/cards/${getCardImage(card[0],card[1])}.png`)} alt={getCardImage(card[0],card[1])}/>
+                                    <img height="100px" margin="10px" src={require(`../../image/cards/${getCardImage(card[0],card[1])}.svg`)} alt={getCardImage(card[0],card[1])}/>
                                 </div>
                             );
                         })}
